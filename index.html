@@ -3058,14 +3058,12 @@
 
             <div class="form-group full">
               <label for="descricao">
-                Descreva o projeto ou problema <span class="required">*</span>
+                Mensagem ou descrição do projeto <span class="muted">(opcional)</span>
               </label>
               <textarea
                 id="descricao"
                 name="descricao"
-                placeholder="Conte o que você precisa, qual problema deseja resolver e quais funcionalidades imagina."
-                required
-                minlength="15"
+                placeholder="Conte o que você precisa ou deixe este campo em branco."
               ></textarea>
               <span class="error-message" data-error-for="descricao"></span>
             </div>
@@ -3093,7 +3091,7 @@
               </svg>
             </button>
             <p class="form-note">
-              O formulário possui validação e proteção contra envios repetidos.
+              O WhatsApp abrirá com os dados do cliente e a mensagem preenchidos automaticamente.
             </p>
           </div>
         </form>
@@ -3358,8 +3356,6 @@
           !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)
         ) {
           message = "Informe um e-mail válido.";
-        } else if (field.id === "descricao" && field.value.trim().length < 15) {
-          message = "Descreva sua necessidade com pelo menos 15 caracteres.";
         }
 
         setFieldError(field, message);
@@ -3442,10 +3438,13 @@
         const message = [
           "Olá, DEV Evolution! Gostaria de solicitar um orçamento.",
           "",
+          "DADOS DO CLIENTE",
           `Nome: ${valueOrDefault("nome")}`,
-          `Empresa: ${valueOrDefault("empresa")}`,
-          `WhatsApp: ${valueOrDefault("telefone")}`,
+          `Empresa: ${valueOrDefault("empresa", "Não possui ou não informou")}`,
+          `Telefone/WhatsApp: ${valueOrDefault("telefone")}`,
           `E-mail: ${valueOrDefault("email")}`,
+          "",
+          "DADOS DO PROJETO",
           `Serviço desejado: ${valueOrDefault("servico")}`,
           `Orçamento disponível: ${valueOrDefault(
             "orcamentoDisponivel",
@@ -3458,10 +3457,10 @@
             "Prefiro não informar"
           )}`,
           "",
-          "Descrição do projeto:",
-          valueOrDefault("descricao"),
+          "MENSAGEM DO CLIENTE",
+          valueOrDefault("descricao", "O cliente não adicionou uma mensagem."),
           "",
-          "Também gostaria de verificar o desconto promocional do primeiro projeto."
+          "Gostaria também de verificar a condição especial do primeiro projeto."
         ].join("\n");
 
         const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
@@ -3473,7 +3472,7 @@
         submitButton.textContent = "Abrindo WhatsApp...";
 
         showToast(
-          "Solicitação preparada. Confirme o envio na conversa do WhatsApp."
+          "Dados preparados. O WhatsApp será aberto com a mensagem pronta para envio."
         );
 
         const popup = window.open(whatsappUrl, "_blank", "noopener,noreferrer");
